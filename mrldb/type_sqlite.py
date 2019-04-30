@@ -73,7 +73,7 @@ class sqlite_dbthread(threading.Thread):
             if rec=='--no more--': break
             yield rec
     def commit(self):
-    	sql.execute("--commit--")
+    	self.execute("--commit--")
     def close(self):
         self.execute('--close--')
     def stop(self):
