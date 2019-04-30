@@ -80,6 +80,7 @@ class sqlite_dbthread(threading.Thread):
         self.status=False
 class sqlite_autocommit(threading.Thread):
     def __init__(self, sql, t):
+        threading.Thread.__init__(self)
         self._stopevent = threading.Event( )
         self.sql=sql
         self.timing=t
