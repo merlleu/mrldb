@@ -58,7 +58,7 @@ print(mdbcl)
   * you can use the database you want or don't use it
   * username and passsword are only used with PlainTextAuthProvider, if you've configured users and password for your db, else, we're connecting as anonymous
 
-* **MrlDBMsql**(*host, database=None, structure=None, username=None, password=None*): a cassandra cluster handler, require library `mysql`
+* **MrlDBMsql**(*host, database=None, structure=None, user=None, password=None*): a cassandra cluster handler, require library `mysql`
   * host is the ip adress of the host or a dns-resolvable name of the host
   * you can use the database you want
   * username and passsword are only used with PlainTextAuthProvider, if you've configured users and password for your db, else, we're connecting as anonymous
