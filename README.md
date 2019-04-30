@@ -60,21 +60,21 @@ mdbcl.get("cc3").select(table="table0", columns="*", conds="col2='test'")
 ### result= [{"col1": 0, "col2": "test"}, ...]
 
 
-### INSERT
+# INSERT
 ## data is a dict with all the values to insert
 ```python
 mdbcl.get("cc3").insert(table="table0", data={"col1": 5, "col2": "ok"})
 ```
 
-### UPDATE
-# use data as the insert command, you can specify conditions with conds
+# UPDATE
+## use data as the insert command, you can specify conditions with conds
 ```python
 mdbcl.get("cc3").update(table="table0", data={"col1": 5, "col2": "ok"}, conds="col2='test'")
 ```
 
 
-### DB init
-# will create the table (or ignore if exists) as the structure
+# DB init
+## will create the table (or ignore if exists) as the structure
 ```python
 mdbcl.get("cc3").init()
 ```
@@ -108,10 +108,12 @@ print(mdbcl)
 * **MrlDBCassandra**(*cluster, db=None, structure=None, username=None, password=None*): a cassandra cluster handler, require library `cassandra-driver`
   * you can use the database you want or don't use it
   * username and passsword are only used with PlainTextAuthProvider, if you've configured users and password for your db, else, we're connecting as anonymous
-* **MrlDBSqlite**(*file, structure=None, autocommit=0*): a sqlite file handler, require base library `sqlite3` (not recommanded)
-  * the file is sqlite3 db file
-  * autocommit is the time in seconds (can be a float) between each autocommit, disabled if set 0 (by default)
+
 * **MrlDBMsql**(*host, database=None, structure=None, username=None, password=None*): a cassandra cluster handler, require library `mysql`
   * host is the ip adress of the host or a dns-resolvable name of the host
   * you can use the database you want
   * username and passsword are only used with PlainTextAuthProvider, if you've configured users and password for your db, else, we're connecting as anonymous
+
+* **MrlDBSqlite**(*file, structure=None, autocommit=0*): a sqlite file handler, require base library `sqlite3` (not recommanded)
+  * the file is sqlite3 db file
+  * autocommit is the time in seconds (can be a float) between each autocommit, disabled if set 0 (by default)
