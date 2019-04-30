@@ -45,19 +45,19 @@ the following examples are working for all the differents database systems
 ```python
 mdbcl.get("cc3").select(table="table0", columns=["col1"], conds=None)
 ```
-### result= [{"col1": 0}, {"col1": 1}...]
+`result= [{"col1": 0}, {"col1": 1}...]`
 
   * you can use this without structure, it just return the results without dictionnarys
 ```python
 mdbcl.get("cc2").select(table="table0", columns=["col1"], conds=None)
 ```
-### result= [(0, ), (1, )...]
+`result= [(0, ), (1, )...]`
 
   * you can use conditions
 ```python
 mdbcl.get("cc3").select(table="table0", columns="*", conds="col2='test'")
 ```
-### result= [{"col1": 0, "col2": "test"}, ...]
+`result= [{"col1": 0, "col2": "test"}, ...]`
 
 
 * INSERT
@@ -79,8 +79,8 @@ will create the table (or ignore if exists) as the structure
 mdbcl.get("cc3").init()
 ```
 
-### with structure={"table0": {"col1": "integer unique", "col2": "text"}, "table2": {"name": "text"}}
-### will execute the following commands:
+with `structure={"table0": {"col1": "integer unique", "col2": "text"}, "table2": {"name": "text"}}`
+will execute the following commands:
 ```python
 ['CREATE TABLE IF NOT EXISTS table0(col1 integer unique, col2 text)',
  'CREATE TABLE IF NOT EXISTS table2(name text)']
@@ -90,8 +90,8 @@ mdbcl.get("cc3").init()
 # DOCUMENTATION
 
 ## STRUCTURE
-### with structure, you can get the column names with the results in a dict for each records
-### structure is an argument for all the DB classes, it must be a None oject or a dictionnary:
+with structure, you can get the column names with the results in a dict for each records
+structure is an argument for all the DB classes, it must be a None oject or a dictionnary:
 ```python
 MrlDBCassandra(... ,structure={"table0": {"col1": "integer unique", "col2": "text"}, "table2": {"name": "text"}}, ...)
 ```
