@@ -13,8 +13,8 @@ class MrlDBCassandra:
             self.cluster=Cluster(cluster)
         else:
             from cassandra.auth import PlainTextAuthProvider
-            auth_provider = PlainTextAuthProvider(username=username, password=password)
-            self.cluster=Cluster(cluster, auth_provider=auth_provider)
+            self.auth_provider = PlainTextAuthProvider(username=username, password=password)
+            self.cluster=Cluster(cluster, auth_provider=self.auth_provider)
         if db!=None:
             self.db=self.cluster.connect(db)
             self.connection=self.db

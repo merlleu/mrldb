@@ -8,7 +8,7 @@ class MrlDBMsql:
     def __init__(self, host, database=None, structure=None, user=None, password=None):
         import mysql.connector as mariadb
         self.connection = mariadb.connect(host=host, database=database, user=user, password=password)
-        self.cursor = mariadb_connection.cursor()
+        self.cursor = self.connection.cursor()
         self.structure=structure
         self._config={"system":"mysql", "host": host, "database": database, "structure": f"{len(structure)} tables", "username": username, "password":password}
         return
