@@ -9,7 +9,7 @@ class MrlDBSqlite:
         self.structure=structure
         self._config={"system":"sqlite", "file": file, "structure": f"{len(structure) if structure!=None else '0'} tables"}
         self.db=sqlite_dbthread(file)
-        if autocommit!=0: self.autocommit=autocommit(self.db, autocommit)
+        if autocommit!=0: self.autocommit=sqlite_autocommit(self.db, autocommit)
         return
     def insert(self, table, data):
         def frmt(d):
