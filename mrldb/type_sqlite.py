@@ -7,7 +7,7 @@ from queue import Queue
 class MrlDBSqlite:
     def __init__(self, file, structure=None, autocommit=0):
         self.structure=structure
-        self._config={"system":"sqlite", "file": file}
+        self._config={"system":"sqlite", "file": file, "structure": f"{len(structure) if structure!=None else '0'} tables"}
         self.db=sqlite_dbthread(file)
         if autocommit!=0: self.autocommit=autocommit(self.db, autocommit)
         return

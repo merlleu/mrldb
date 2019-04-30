@@ -10,7 +10,7 @@ class MrlDBMsql:
         self.connection = mariadb.connect(host=host, database=database, user=user, password=password)
         self.cursor = self.connection.cursor()
         self.structure=structure
-        self._config={"system":"mysql", "host": host, "database": database, "structure": f"{len(structure)} tables", "username": username, "password":password}
+        self._config={"system":"mysql", "host": host, "database": database, "structure": f"{len(structure) if structure!=None else '0'} tables", "username": username, "password":password}
         return
     def insert(self, table, data):
         def frmt(d):

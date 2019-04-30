@@ -22,7 +22,7 @@ class MrlDBCassandra:
             self.connection=self.cluster
         self.structure=structure
         self.cursor=self.db
-        self._config={"system":"cassandra", "cluster": cluster,"database": name, "structure": f"{len(structure)} tables", "username": username, "password":password}
+        self._config={"system":"cassandra", "cluster": cluster,"database": name, "structure": f"{len(structure) if structure!=None else '0'} tables", "username": username, "password":password}
         return
     def insert(self, table, data):
         def frmt(d):
