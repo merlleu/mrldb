@@ -6,3 +6,4 @@ __pycache__/
 __target__/
 setversion.py
 test.py
+test.db
