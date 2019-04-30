@@ -104,20 +104,20 @@ structure={"table0": {"col1": "integer unique", "col2": "text"}, "table2": {"nam
 ```
 
 the following examples are working for all the differents database systems
-* SELECT
-  * with the correct structure, the following command will give you for each records a dict with the col name and the value, (you can replace the columns by a `"*"`
+## SELECT
+* with the correct structure, the following command will give you for each records a dict with the col name and the value, (you can replace the columns by a `"*"`
 ```python
 mdbcl.get("cc3").select(table="table0", columns=["col1"], conds=None)
 ```
 `result= [{"col1": 0}, {"col1": 1}...]`
 
-  * you can use this without structure, it just return the results without dictionnarys
+* you can use this without structure, it just return the results without dictionnarys
 ```python
 mdbcl.get("cc2").select(table="table0", columns=["col1"], conds=None)
 ```
 `result= [(0, ), (1, )...]`
 
-  * you can use conditions
+* you can use conditions
 ```python
 mdbcl.get("cc3").select(table="table0", columns="*", conds="col2='test'")
 ```

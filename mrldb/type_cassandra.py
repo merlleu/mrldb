@@ -44,3 +44,7 @@ class MrlDBCassandra:
     def init(self):
         [self.connection.execute(command) for command in get_struct_init(self.structure)]
         return self
+    def __str__(self):
+        return f"<mrldb.MrlDBCassandra at {id(self)} - connection: {self._config['cluster']}>"
+    def __repr__(self):
+        return f"<mrldb.MrlDBCassandra at {id(self)} - connection: {self._config['cluster']}>"

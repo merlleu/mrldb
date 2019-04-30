@@ -27,6 +27,10 @@ class MrlDBCluster:
         return self.dbs.items().__iter__()
     def __getitem__(self, key):
         return self.dbs[self.aliases[key]]
+    def __str__(self):
+        return f"<mrldb.MrlDBCluster at {id(self)} - {len(self.dbs)}>"
+    def __repr__(self):
+        return f"<mrldb.MrlDBCluster at {id(self)} - {len(self.dbs)}>"
 mdbcl=None
 try:
     from werkzeug.local import LocalProxy

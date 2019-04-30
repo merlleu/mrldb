@@ -32,6 +32,10 @@ class MrlDBSqlite:
     def init(self):
         [self.db.execute(command) for command in get_struct_init(self.structure)]
         return self
+    def __str__(self):
+        return f"<mrldb.MrlDBSqlite at {id(self)} - connection: {self._config['file']}>"
+    def __repr__(self):
+        return f"<mrldb.MrlDBSqlite at {id(self)} - connection: {self._config['file']}>"
 
 class sqlite_dbthread(threading.Thread):
     def __init__(self, db):

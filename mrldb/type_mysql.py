@@ -33,3 +33,7 @@ class MrlDBMsql:
     def init(self):
         [self.cursor.execute(command) for command in get_struct_init(self.structure)]
         return self
+    def __str__(self):
+        return f"<mrldb.MrlDBMsql at {id(self)} - connection: {self._config['host']}>"
+    def __repr__(self):
+        return f"<mrldb.MrlDBMsql at {id(self)} - connection: {self._config['host']}>"
