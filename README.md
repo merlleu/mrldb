@@ -60,27 +60,27 @@ mdbcl.get("cc3").select(table="table0", columns="*", conds="col2='test'")
 `result= [{"col1": 0, "col2": "test"}, ...]`
 
 
-* INSERT
-data is a dict with all the values to insert
+## INSERT
+* data is a dict with all the values to insert
 ```python
 mdbcl.get("cc3").insert(table="table0", data={"col1": 5, "col2": "ok"})
 ```
 
-* UPDATE
-use data as the insert command, you can specify conditions with conds
+## UPDATE
+* use data as the insert command, you can specify conditions with conds
 ```python
 mdbcl.get("cc3").update(table="table0", data={"col1": 5, "col2": "ok"}, conds="col2='test'")
 ```
 
 
-* DB init
-will create the table (or ignore if exists) as the structure
+## DB init
+* will create the table (or ignore if exists) as the structure
 ```python
 mdbcl.get("cc3").init()
 ```
 
-with `structure={"table0": {"col1": "integer unique", "col2": "text"}, "table2": {"name": "text"}}`
-will execute the following commands:
+### with `structure={"table0": {"col1": "integer unique", "col2": "text"}, "table2": {"name": "text"}}`
+### will execute the following commands:
 ```python
 ['CREATE TABLE IF NOT EXISTS table0(col1 integer unique, col2 text)',
  'CREATE TABLE IF NOT EXISTS table2(name text)']
