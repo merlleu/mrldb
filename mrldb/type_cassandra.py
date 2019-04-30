@@ -18,17 +18,18 @@ class MrlDBCassandra:
         else:
             self.connection=self.cluster
         self.structure=structure
+        self.cursor=self.db
         self._config={"system":"cassandra", "cluster": cluster,"database": name, "structure": f"{len(structure)} tables", "username": username, "password":password}
         return
     def insert(self, table, data):
         def frmt(d):
             return f"'{d}'" if isinstance(d, str) else str(d)
         return self.connection.execute(f"INSERT INTO {table} ({', '.join([frmt(x) for x in data.keys()])}) VALUES ({', '.join([frmt(x) for x in data.values()])})")
-    def update(table, data, conds=None):
+    def update(self, table, data, conds=None):
         def frmt(d):
             return f"'{d}'" if isinstance(d, str) else str(d)
         return self.connection.execute(f"UPDATE {table} SET {', '.join([key+'='+frmt(arg) for key, arg in data.items()])}{' WHERE '+conds if conds!=None else ''}")
-    def select(table, columns, conds=None):
+    def select(self, table, columns, conds=None):
         if self.structure!=None:
             if columns=="*":columns=self.structure[table].keys()
             return [

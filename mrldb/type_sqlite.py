@@ -3,7 +3,6 @@ import threading
 from queue import Queue
 class MrlDBSqlite:
     def __init__(self, file, structure=None, autocommit=0):
-
         self.structure=structure
         self._config={"system":"sqlite", "file": file}
         self.db=sqlite_dbthread(file)
@@ -13,20 +12,21 @@ class MrlDBSqlite:
         def frmt(d):
             return f"'{d}'" if isinstance(d, str) else str(d)
         return self.db.execute(f"INSERT INTO {table} ({', '.join([frmt(x) for x in data.keys()])}) VALUES ({', '.join([frmt(x) for x in data.values()])})")
-    def update(table, data, conds=None):
+    def update(self, table, data, conds=None):
         def frmt(d):
             return f"'{d}'" if isinstance(d, str) else str(d)
         return self.db.execute(f"UPDATE {table} SET {', '.join([key+'='+frmt(arg) for key, arg in data.items()])}{' WHERE '+conds if conds!=None else ''}")
-    def select(table, columns, conds=None):
+    def select(self, table, columns, conds=None):
         if self.structure!=None:
             if columns=="*":columns=self.structure[table].keys()
+            self.db.execute(f"SELECT {'*' if columns=='*' else ', '.join(columns)} FROM {table}{' WHERE '+conds if conds!=None else ''}")
             return [
             {_col:_var for _col, _var in zip(columns, record)}
             for record in
-            self.db.execute(f"SELECT {'*' if columns=='*' else ', '.join(columns)} FROM {table}{' WHERE '+conds if conds!=None else ''}")
+            self.cursor.fetchall()
             ]
         else:
-            return self.db.execute(f"SELECT {'*' if columns=='*' else ', '.join(columns)} FROM {table}{' WHERE '+conds if conds!=None else ''}")
+            return self.cursor.fetchall()
     def _getinfos(self):
         return self._config
     def init(self):
@@ -48,11 +48,13 @@ class sqlite_dbthread(threading.Thread):
             req, arg, res = self.reqs.get()
             if req=='--close--': break
             elif req=='--commit--': cnx.commit()
-            cursor.execute(req, arg)
-            if res:
-                for rec in cursor:
-                    res.put(rec)
-                res.put('--no more--')
+            try:
+                cursor.execute(req, arg)
+                if res:
+                    for rec in cursor:
+                        res.put(rec)
+                    res.put('--no more--')
+            except:res.put('--no more--')
         cnx.close()
     def execute(self, req, arg=None, res=None):
         self.reqs.put((req, arg or tuple(), res))

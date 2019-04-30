@@ -11,6 +11,70 @@ pip install mrldb
 ```
 
 ### This package supports the followings database systems: mariadb, mysql, cassandra, sqlite3
+# DOCUMENTATION
+
+* **MrlDBCluster**(): a cluster of databases, the last created *MrlDBCluster* can be accessible via **mdbcl**
+  * *MrlDBCluster*.**get**(*name*): return the **MrlDB** from the alias or the name
+  * *MrlDBCluster*.**add**(*name, db, aliases=[]*): add a ***MrlDB*** object with the name (overwrite if an object has the same name), and link the aliases
+  * *MrlDBCluster*.**addalias**(*name, aliases*): link aliases to the name
+  * *MrlDBCluster*.**get_cluster_infos**(): return a **dict** with all the config of the connections `{"name": {config...}}`
+
+  * *MrlDBCluster* **[name]**: return the db from the alias or the name
+  * **for name, connection in** *MrlDBCluster*: iterate over a list of **tuple** `(dbname, connection)`
+
+  * *MrlDBCluster*.**dbs**: a **dict** with all the connections `{"conn1": <MrlDB>, ...}`
+  * *MrlDBCluster*.**aliases**: a **dict** with all the aliases and the realname `{"alias": "realname", ...}`
+```python
+from mrldb import MrlDBCluster, mdbcl
+mycluster=MrlDBCluster()
+```
+* **mdbcl**: return  the last created **MrlDBCluster**
+```python
+print(mdbcl)
+```
+
+## ***MrlDB*** classes
+* **MrlDB** base class: (Base of MrlDBCassandra, MrlDBMsql, MrlDBSqlite)
+  * *MrlDB*.**insert**(*table, data*): insert a new record
+    * table is a **str** of the table where the insert must be executed
+    * data is **dict** with the columns and the values to insert {"col1": "value1", "col2", 3.14}
+  * *MrlDB*.**update**(*table, data, conds=None*): update an existing(s) record(s)
+    * table is a **str** of the table where the update must be executed
+    * data is **dict** with the columns and the values to update {"col1": "value1", "col2", 3.14}
+    * conds are a **str** object as `"col1='test' and col2=5"` or a **NoneType** object if you want to update all the records of your table
+  * *MrlDB*.**select**(*table, columns, conds=None*): get record(s) value(s)
+    * table is a **str** of the table where the select is executed
+    * data is **list** with the columns to get or a `"*"` to get all the columns
+    * conds are a **str** object as `"col1='test' and col2=5"` or a **NoneType** object if you want to select all the records of your table
+  * *MrlDB*.**init**(): create (or ignoreif they already exists) the tables from the db structure
+  * *MrlDB*.**cursor**: a connection, you can use *MrlDB*.**cursor**.*execute*(command)
+  * *MrlDB*.**structure**: a **dict** of the db structure or a **NoneType** object if not specified
+  * *MrlDB*.**_config**: a **dict** of the connexion config
+  * *MrlDB*.**_getinfos**(): return *MrlDB*.**_config**
+
+
+* **MrlDBCassandra**(*cluster, db=None, structure=None, username=None, password=None*): a cassandra cluster handler, require library `cassandra-driver`
+  * you can use the database you want or don't use it
+  * username and passsword are only used with PlainTextAuthProvider, if you've configured users and password for your db, else, we're connecting as anonymous
+
+* **MrlDBMsql**(*host, database=None, structure=None, username=None, password=None*): a cassandra cluster handler, require library `mysql`
+  * host is the ip adress of the host or a dns-resolvable name of the host
+  * you can use the database you want
+  * username and passsword are only used with PlainTextAuthProvider, if you've configured users and password for your db, else, we're connecting as anonymous
+
+* **MrlDBSqlite**(*file, structure=None, autocommit=0*): a sqlite file handler, require base library `sqlite3` (not recommanded)
+  * the file is sqlite3 db file
+  * autocommit is the time in seconds (can be a float) between each autocommit, disabled if set 0 (by default)
+
+
+## STRUCTURE argument
+#### with structure, you can get the column names with the results in a dict for each records
+#### structure is an argument for all the DB classes, it must be a None oject or a dictionnary:
+```python
+MrlDBCassandra(... ,structure={"table0": {"col1": "integer unique", "col2": "text"}, "table2": {"name": "text"}}, ...)
+```
+
+
 
 # Tutorial script:
 ```python
@@ -85,36 +149,3 @@ mdbcl.get("cc3").init()
 ['CREATE TABLE IF NOT EXISTS table0(col1 integer unique, col2 text)',
  'CREATE TABLE IF NOT EXISTS table2(name text)']
  ```
-
-
-# DOCUMENTATION
-
-## STRUCTURE
-with structure, you can get the column names with the results in a dict for each records
-structure is an argument for all the DB classes, it must be a None oject or a dictionnary:
-```python
-MrlDBCassandra(... ,structure={"table0": {"col1": "integer unique", "col2": "text"}, "table2": {"name": "text"}}, ...)
-```
-## Imports:
-* **MrlDBCluster**(): a cluster of databases, the last created *MrlDBCluster* can be accessible via **mdbcl**
-```python
-from mrldb import MrlDBCluster, mdbcl
-mycluster=MrlDBCluster()
-```
-* **mdbcl**: return  the last created **MrlDBCluster**
-```python
-print(mdbcl)
-```
-
-* **MrlDBCassandra**(*cluster, db=None, structure=None, username=None, password=None*): a cassandra cluster handler, require library `cassandra-driver`
-  * you can use the database you want or don't use it
-  * username and passsword are only used with PlainTextAuthProvider, if you've configured users and password for your db, else, we're connecting as anonymous
-
-* **MrlDBMsql**(*host, database=None, structure=None, username=None, password=None*): a cassandra cluster handler, require library `mysql`
-  * host is the ip adress of the host or a dns-resolvable name of the host
-  * you can use the database you want
-  * username and passsword are only used with PlainTextAuthProvider, if you've configured users and password for your db, else, we're connecting as anonymous
-
-* **MrlDBSqlite**(*file, structure=None, autocommit=0*): a sqlite file handler, require base library `sqlite3` (not recommanded)
-  * the file is sqlite3 db file
-  * autocommit is the time in seconds (can be a float) between each autocommit, disabled if set 0 (by default)

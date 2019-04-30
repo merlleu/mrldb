@@ -13,20 +13,21 @@ class MrlDBMsql:
         def frmt(d):
             return f"'{d}'" if isinstance(d, str) else str(d)
         return self.cursor.execute(f"INSERT INTO {table} ({', '.join([frmt(x) for x in data.keys()])}) VALUES ({', '.join([frmt(x) for x in data.values()])})")
-    def update(table, data, conds=None):
+    def update(self, table, data, conds=None):
         def frmt(d):
             return f"'{d}'" if isinstance(d, str) else str(d)
         return self.cursor.execute(f"UPDATE {table} SET {', '.join([key+'='+frmt(arg) for key, arg in data.items()])}{' WHERE '+conds if conds!=None else ''}")
-    def select(table, columns, conds=None):
+    def select(self, table, columns, conds=None):
         if self.structure!=None:
             if columns=="*":columns=self.structure[table].keys()
+            self.cursor.execute(f"SELECT {'*' if columns=='*' else ', '.join(columns)} FROM {table}{' WHERE '+conds if conds!=None else ''}")
             return [
             {_col:_var for _col, _var in zip(columns, record)}
             for record in
-            self.cursor.execute(f"SELECT {'*' if columns=='*' else ', '.join(columns)} FROM {table}{' WHERE '+conds if conds!=None else ''}")
+            self.cursor.fetchall()
             ]
         else:
-            return self.cursor.execute(f"SELECT {'*' if columns=='*' else ', '.join(columns)} FROM {table}{' WHERE '+conds if conds!=None else ''}")
+            return self.cursor.fetchall()
     def _getinfos(self):
         return self._config
     def init(self):

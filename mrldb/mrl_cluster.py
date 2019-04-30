@@ -23,6 +23,10 @@ class MrlDBCluster:
         return {
         name: db._getinfos() for name, db in self.dbs.items()
         }
+    def __iter__(self):
+        return self.dbs.items().__iter__()
+    def __getitem__(self, key):
+        return self.dbs[self.aliases[key]]
 mdbcl=None
 try:
     from werkzeug.local import LocalProxy
