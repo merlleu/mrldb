@@ -3,7 +3,7 @@ import setuptools
 with open("README.md", "r") as fh:
     long_description = fh.read()
 ##version#start##
-__version__='0.0.15'
+__version__='0.0.16'
 ##version#end##
 setuptools.setup(
     name="mrldb",

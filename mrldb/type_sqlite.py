@@ -9,6 +9,7 @@ class MrlDBSqlite:
         self.structure=structure
         self._config={"system":"sqlite", "file": file, "structure": f"{len(structure) if structure!=None else '0'} tables"}
         self.db=sqlite_dbthread(file)
+        self.autocommit=None
         if autocommit!=0: self.autocommit=sqlite_autocommit(self.db, autocommit)
         return
     def insert(self, table, data):
@@ -22,23 +23,23 @@ class MrlDBSqlite:
     def select(self, table, columns, conds=None):
         if self.structure!=None:
             if columns=="*":columns=self.structure[table].keys()
-            self.db.execute(f"SELECT {'*' if columns=='*' else ', '.join(columns)} FROM {table}{' WHERE '+conds if conds!=None else ''}")
+
             return [
             {_col:_var for _col, _var in zip(columns, record)}
             for record in
-            self.cursor.fetchall()
+            self.db.select(f"SELECT {'*' if columns=='*' else ', '.join(columns)} FROM {table}{' WHERE '+conds if conds!=None else ''}")
             ]
         else:
-            return self.cursor.fetchall()
+            return self.db.select(f"SELECT {'*' if columns=='*' else ', '.join(columns)} FROM {table}{' WHERE '+conds if conds!=None else ''}")
     def _getinfos(self):
         return self._config
     def init(self):
         [self.db.execute(command) for command in get_struct_init(self.structure)]
         return self
     def __str__(self):
-        return f"<mrldb.MrlDBSqlite at {id(self)} - connection: {self._config['file']}>"
+        return f"<mrldb.MrlDBSqlite at {id(self)} - connection: {self._config['file']} - autocommit: {f'{self.autocommit.timing} seconds' if self.autocommit!=None else 'disabled'}>"
     def __repr__(self):
-        return f"<mrldb.MrlDBSqlite at {id(self)} - connection: {self._config['file']}>"
+        return f"<mrldb.MrlDBSqlite at {id(self)} - connection: {self._config['file']} - autocommit: {f'{self.autocommit.timing} seconds' if self.autocommit!=None else 'disabled'}>"
 
 class sqlite_dbthread(threading.Thread):
     def __init__(self, db):
@@ -56,6 +57,7 @@ class sqlite_dbthread(threading.Thread):
             if req=='--close--': break
             elif req=='--commit--': cnx.commit()
             try:
+                print(req, arg)
                 cursor.execute(req, arg)
                 if res:
                     for rec in cursor:
