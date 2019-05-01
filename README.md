@@ -141,7 +141,7 @@ mdbcl.get("cc3").select(table="table0", columns="*", conds="col2='test'")
 mdbcl.get("cc3").select(table="table0", columns="*", conds=f"""(col2='test') or (col1 not in ({mdbstr.select(table='table2', columns='*', conds="name='john' ")}))""")
 ```
 will execute this command: `"SELECT * FROM table0 WHERE (col2='test') or (in (SELECT * FROM table2 WHERE name='john' ))"`
-`result= [{"col1": 0, "col2": "test"}, ...]`
+###### `result= [{"col1": 0, "col2": "test"}, ...]`
 
 
 ## INSERT
