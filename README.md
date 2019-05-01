@@ -34,6 +34,19 @@ mycluster=MrlDBCluster()
 print(mdbcl)
 ```
 
+* **mdbstr**: an object to generate sql commands, (the same as the one included in the **MrlDB** classes)
+  * *mdbstr*.**insert**(*table, data*): return command to insert a new record
+    * table is a **str** of the table where the insert must be executed
+    * data is **dict** with the columns and the values to insert {"col1": "value1", "col2", 3.14}
+  * *mdbstr*.**update**(*table, data, conds=None*): return command to update an existing(s) record(s)
+    * table is a **str** of the table where the update must be executed
+    * data is **dict** with the columns and the values to update {"col1": "value1", "col2", 3.14}
+    * conds are a **str** object as `"col1='test' and col2=5"` or a **NoneType** object if you want to update all the records of your table
+  * *mdbstr*.**select**(*table, columns, conds=None*): return command to get record(s) value(s)
+    * table is a **str** of the table where the select is executed
+    * data is **list** with the columns to get or a `"*"` to get all the columns
+    * conds are a **str** object as `"col1='test' and col2=5"` or a **NoneType** object if you want to select all the records of your table
+
 ## ***MrlDB*** classes
 * **MrlDB** base class: (Base of MrlDBCassandra, MrlDBMsql, MrlDBSqlite)
   * *MrlDB*.**insert**(*table, data*): insert a new record
@@ -79,7 +92,7 @@ MrlDBCassandra(... ,structure={"table0": {"col1": "integer unique", "col2": "tex
 
 # Tutorial script:
 ```python
-from mrldb import MrlDBCassandra, MrlDBCluster, mdbcl
+from mrldb import MrlDBCassandra, MrlDBCluster, mdbcl, mdbstr
 ```
 
 * we add a simple cassandra cluster as connection to the mrldb cluster, we set cc0 as an alias to the db
@@ -122,6 +135,12 @@ mdbcl.get("cc2").select(table="table0", columns=["col1"], conds=None)
 ```python
 mdbcl.get("cc3").select(table="table0", columns="*", conds="col2='test'")
 ```
+`result= [{"col1": 0, "col2": "test"}, ...]`
+* in sql (not in cql !), you can do sql subrequests, we are formatting them with **mdbstr** class
+```python
+mdbcl.get("cc3").select(table="table0", columns="*", conds=f"""(col2='test') or (col1 not in ({mdbstr.select(table='table2', columns='*', conds="name='john' ")}))""")
+```
+will execute this command: `"SELECT * FROM table0 WHERE (col2='test') or (in (SELECT * FROM table2 WHERE name='john' ))"`
 `result= [{"col1": 0, "col2": "test"}, ...]`
 
 

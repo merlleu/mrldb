@@ -15,7 +15,7 @@ class MrlDBMsql:
     def insert(self, table, data):
         def frmt(d):
             return f"'{d}'" if isinstance(d, str) else str(d)
-        return self.cursor.execute(f"INSERT INTO {table} ({', '.join([frmt(x) for x in data.keys()])}) VALUES ({', '.join([frmt(x) for x in data.values()])})")
+        return self.cursor.execute(f"INSERT INTO {table}({', '.join([x for x in data.keys()])}) VALUES ({', '.join([frmt(x) for x in data.values()])})")
     def update(self, table, data, conds=None):
         def frmt(d):
             return f"'{d}'" if isinstance(d, str) else str(d)

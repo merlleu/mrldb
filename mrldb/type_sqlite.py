@@ -5,17 +5,17 @@ from .struct import get_struct_init
 import threading
 from queue import Queue
 class MrlDBSqlite:
-    def __init__(self, file, structure=None, autocommit=0):
+    def __init__(self, file, structure=None, autocommit=0, debug=False):
         self.structure=structure
         self._config={"system":"sqlite", "file": file, "structure": f"{len(structure) if structure!=None else '0'} tables"}
-        self.db=sqlite_dbthread(file)
+        self.db=sqlite_dbthread(file, debug)
         self.autocommit=None
         if autocommit!=0: self.autocommit=sqlite_autocommit(self.db, autocommit)
         return
     def insert(self, table, data):
         def frmt(d):
             return f"'{d}'" if isinstance(d, str) else str(d)
-        return self.db.execute(f"INSERT INTO {table} ({', '.join([frmt(x) for x in data.keys()])}) VALUES ({', '.join([frmt(x) for x in data.values()])})")
+        return self.db.execute(f"INSERT INTO {table}({', '.join([x for x in data.keys()])}) VALUES ({', '.join([frmt(x) for x in data.values()])})")
     def update(self, table, data, conds=None):
         def frmt(d):
             return f"'{d}'" if isinstance(d, str) else str(d)
@@ -42,10 +42,11 @@ class MrlDBSqlite:
         return f"<mrldb.MrlDBSqlite at {id(self)} - connection: {self._config['file']} - autocommit: {f'{self.autocommit.timing} seconds' if self.autocommit!=None else 'disabled'}>"
 
 class sqlite_dbthread(threading.Thread):
-    def __init__(self, db):
+    def __init__(self, db, debug):
         threading.Thread.__init__(self)
         self.db=db
         self.status=True
+        self.debug=debug
         self.reqs=Queue()
         self.start()
     def run(self):
@@ -57,7 +58,7 @@ class sqlite_dbthread(threading.Thread):
             if req=='--close--': break
             elif req=='--commit--': cnx.commit()
             try:
-                print(req, arg)
+                if self.debug: print(self.db ,"\t",req, arg)
                 cursor.execute(req, arg)
                 if res:
                     for rec in cursor:
