@@ -34,15 +34,15 @@ mycluster=MrlDBCluster()
 print(mdbcl)
 ```
 
-* **mdbstr**: an object to generate sql commands, (the same as the one included in the **MrlDB** classes)
-  * *mdbstr*.**insert**(*table, data*): return command to insert a new record
+* **mdbstr**: an object to generate sql commands(**str**), (the same as the one included in the **MrlDB** classes)
+  * *mdbstr*.**insert**(*table, data*): return **str** command to insert a new record
     * table is a **str** of the table where the insert must be executed
     * data is **dict** with the columns and the values to insert {"col1": "value1", "col2", 3.14}
-  * *mdbstr*.**update**(*table, data, conds=None*): return command to update an existing(s) record(s)
+  * *mdbstr*.**update**(*table, data, conds=None*): return **str** command to update an existing(s) record(s)
     * table is a **str** of the table where the update must be executed
     * data is **dict** with the columns and the values to update {"col1": "value1", "col2", 3.14}
     * conds are a **str** object as `"col1='test' and col2=5"` or a **NoneType** object if you want to update all the records of your table
-  * *mdbstr*.**select**(*table, columns, conds=None*): return command to get record(s) value(s)
+  * *mdbstr*.**select**(*table, columns, conds=None*): return **str** command to get record(s) value(s)
     * table is a **str** of the table where the select is executed
     * data is **list** with the columns to get or a `"*"` to get all the columns
     * conds are a **str** object as `"col1='test' and col2=5"` or a **NoneType** object if you want to select all the records of your table
