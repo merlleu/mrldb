@@ -41,6 +41,10 @@ class MrlDBCassandra:
             ]
         else:
             return self.cursor.execute(f"SELECT {'*' if columns=='*' else ', '.join(columns)} FROM {table}{' WHERE '+conds if conds!=None else ''}")
+    def delete(self, table, conds=None):
+        # table= "mytable"
+        # conds= "(x=1) or (x=2 and y=3)"
+        return self.cursor.execute(f"DELETE FROM {table}{' WHERE '+conds if conds!=None else ''}")
     def _getinfos(self):
         return self._config
     def init(self):

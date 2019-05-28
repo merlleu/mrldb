@@ -23,4 +23,8 @@ class _dbutils:
         # columns= ["test", "x"]
         # conds= "(x=1) or (x=2 and y=3)"
         return f"SELECT {'*' if columns=='*' else ', '.join(columns)} FROM {table}{' WHERE '+conds if conds!=None else ''}"
+    def delete(self, table, conds=None):
+        # table= "mytable"
+        # conds= "(x=1) or (x=2 and y=3)"
+        return f"DELETE FROM {table}{' WHERE '+conds if conds!=None else ''}"
 dbutils=_dbutils()

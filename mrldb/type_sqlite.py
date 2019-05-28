@@ -9,6 +9,7 @@ class MrlDBSqlite:
         self.structure=structure
         self._config={"system":"sqlite", "file": file, "structure": f"{len(structure) if structure!=None else '0'} tables"}
         self.db=sqlite_dbthread(file, debug)
+        self.cursor=self.db
         self.autocommit=None
         if autocommit!=0: self.autocommit=sqlite_autocommit(self.db, autocommit)
         return
@@ -31,6 +32,10 @@ class MrlDBSqlite:
             ]
         else:
             return self.db.select(f"SELECT {'*' if columns=='*' else ', '.join(columns)} FROM {table}{' WHERE '+conds if conds!=None else ''}")
+    def delete(self, table, conds=None):
+        # table= "mytable"
+        # conds= "(x=1) or (x=2 and y=3)"
+        return self.db.execute(f"DELETE FROM {table}{' WHERE '+conds if conds!=None else ''}")
     def _getinfos(self):
         return self._config
     def init(self):
