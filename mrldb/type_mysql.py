@@ -25,7 +25,7 @@ class MrlDBMsql:
         self.connection.autocommit=self._config["autocommit"]
     def insert(self, table, data):
         def frmt(d):
-            return f"'{d}'" if isinstance(d, str) else ("null" if d==None else str(d))
+            return d.__repr__() if d is not None else "null"
         try:
             return self.cursor.execute(f"INSERT INTO {table}({', '.join([x for x in data.keys()])}) VALUES ({', '.join([frmt(x) for x in data.values()])})")
         except OperationalError:
@@ -33,7 +33,7 @@ class MrlDBMsql:
             return self.cursor.execute(f"INSERT INTO {table}({', '.join([x for x in data.keys()])}) VALUES ({', '.join([frmt(x) for x in data.values()])})")
     def update(self, table, data, conds=None):
         def frmt(d):
-            return f"'{d}'" if isinstance(d, str) else ("null" if d==None else str(d))
+            return d.__repr__() if d is not None else "null"
         try:
             return self.cursor.execute(f"UPDATE {table} SET {', '.join([key+'='+frmt(arg) for key, arg in data.items()])}{' WHERE '+conds if conds!=None else ''}")
         except OperationalError:
