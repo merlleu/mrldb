@@ -1,7 +1,7 @@
 # MrlDB by Rémi "Mr e-RL" LANGDORPH
 ## Copyright (c) 2019 Rémi LANGDORPH - mrerl@warlegend.net (under MIT license)
 
-# mrldb is a powerfull database handler for python
+# mrldb is a powerful database handler for python
 ## Links:
 #### [pypi project](https://pypi.org/project/mrldb/)
 #### [github repo](https://github.com/merlleu/mrldb)
