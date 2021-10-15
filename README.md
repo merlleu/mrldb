@@ -2,7 +2,9 @@ This repo is no longer maintained.
 
 # MrlDB
 
-# MrlDB is a powerful database handler for python
+MrlDB is a powerful database handler for python
+
+
 ## Links:
 #### [pypi project](https://pypi.org/project/mrldb/)
 #### [github repo](https://github.com/merlleu/mrldb)
