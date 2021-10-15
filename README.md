@@ -1,7 +1,8 @@
-# MrlDB by Rémi "Mr e-RL" LANGDORPH
-## Copyright (c) 2019 Rémi LANGDORPH - mrerl@warlegend.net (under MIT license)
+This repo is no longer maintained.
 
-# mrldb is a powerful database handler for python
+# MrlDB
+
+# MrlDB is a powerful database handler for python
 ## Links:
 #### [pypi project](https://pypi.org/project/mrldb/)
 #### [github repo](https://github.com/merlleu/mrldb)
@@ -169,3 +170,6 @@ mdbcl.get("cc3").init()
 ['CREATE TABLE IF NOT EXISTS table0(col1 integer unique, col2 text)',
  'CREATE TABLE IF NOT EXISTS table2(name text)']
  ```
+
+
+### Copyright (c) 2019 Rémi "Mr e-RL"LANGDORPH - mrerl@warlegend.net (under MIT license)
