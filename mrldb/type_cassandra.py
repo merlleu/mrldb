@@ -10,13 +10,13 @@ class MrlDBCassandra:
         if isinstance(cluster, str):
             cluster=[cluster]
         if (username==None or password==None):
-            self.cluster=Cluster(cluster)
+            self.cluster_=Cluster(cluster)
         else:
             from cassandra.auth import PlainTextAuthProvider
             self.auth_provider = PlainTextAuthProvider(username=username, password=password)
             self.cluster_=Cluster(cluster, auth_provider=self.auth_provider)
         if db is not None:
-            self.db=self.cluster.connect(db)
+            self.db=self.cluster_.connect(db)
             self.cursor=self.db
         else:
             self.cluster_=self.cluster
